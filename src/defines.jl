@@ -1,0 +1,26 @@
+const DSP_STAT_OPTIMAL          = 3000;
+const DSP_STAT_PRIM_INFEASIBLE  = 3001;
+const DSP_STAT_DUAL_INFEASIBLE  = 3002;
+const DSP_STAT_LIM_ITERorTIME   = 3004;
+const DSP_STAT_STOPPED_GAP      = 3005;
+const DSP_STAT_STOPPED_NODE     = 3006;
+const DSP_STAT_STOPPED_TIME     = 3007;
+const DSP_STAT_STOPPED_USER     = 3008;
+const DSP_STAT_STOPPED_SOLUTION = 3009;
+const DSP_STAT_STOPPED_ITER     = 3010;
+const DSP_STAT_STOPPED_UNKNOWN  = 3011;
+const DSP_STAT_STOPPED_MPI      = 3012;
+const DSP_STAT_ABORT            = 3013;
+const DSP_STAT_LIM_PRIM_OBJ     = 3014;
+const DSP_STAT_LIM_DUAL_OBJ     = 3015;
+const DSP_STAT_UNKNOWN          = 3999;
+
+const DSP_SOLVER_DE = 0;
+const DSP_SOLVER_BD = 1;
+const DSP_SOLVER_DD = 2;
+
+type Env
+	p::Ptr{Void}
+	solver::Int
+end
+
