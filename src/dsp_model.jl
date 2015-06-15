@@ -1,6 +1,11 @@
 function readSmps(filename)
 	# Check pointer to TssModel
 	check_problem()
+	proc_idx_set = 1:nscen;
+	if isdefined(:MPI) == true
+		proc_idx_set = StochJuMP.getProcIdxSet(model);
+	end
+	setDdProcIdxSet(proc_idx_set);  
 	@dsp_ccall("readSmps", Void, (Ptr{Void}, Ptr{Uint8}), env.p, convert(Vector{Uint8}, filename))
 end
 
