@@ -21,8 +21,8 @@ function loadProblem(model::JuMP.Model)
 	nrows1 = convert(Cint, length(model.linconstr))
 	ncols2 = 0
 	nrows2 = 0
-	proc_idx_set = 1:nscen;
-	if isdefined(:MPI) == true
+	proc_idx_set = collect(1:nscen);
+	if isdefined(:MPI) == true && MPI.Initialized() == true
 		proc_idx_set = StochJuMP.getProcIdxSet(model);
 	end
 	setDdProcIdxSet(proc_idx_set);  
