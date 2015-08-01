@@ -117,7 +117,7 @@ end
 
 function getSolution()
 	num = getNumCols()
-	return getSolution(env,num)
+	return getSolution(num)
 end
 
 function getNumIterations()
