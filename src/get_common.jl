@@ -42,11 +42,11 @@ function getNumCols(stage)
 end
 
 function getNumRows()
-	return getNumRows(DSP_FIRST_STAGE) + getNumScenarios() * getNumRows(env,DSP_SECOND_STAGE)
+	return getNumRows(DSP_FIRST_STAGE) + getNumScenarios() * getNumRows(DSP_SECOND_STAGE)
 end
 
 function getNumCols()
-	return getNumCols(DSP_FIRST_STAGE) + getNumScenarios() * getNumCols(env,DSP_SECOND_STAGE)
+	return getNumCols(DSP_FIRST_STAGE) + getNumScenarios() * getNumCols(DSP_SECOND_STAGE)
 end
 
 function getObjCoef()
