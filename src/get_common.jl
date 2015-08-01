@@ -33,21 +33,20 @@ function getNumScenarios()
 	return @dsp_ccall("getNumScenarios", Cint, (Ptr{Void},), env.p)
 end
 
-function getNumRows(stage::Integer)
+function getNumRows(stage)
 	return @dsp_ccall("getNumRows", Cint, (Ptr{Void}, Cint), env.p, convert(Cint, stage))
 end
 
-function getNumRows(stage::Integer)
-	return @dsp_ccall("getNumRows", Cint, (Ptr{Void}, Cint), env.p, convert(Cint, stage))
-end
-
-function getNumCols(stage::Integer)
+function getNumCols(stage)
 	return @dsp_ccall("getNumCols", Cint, (Ptr{Void}, Cint), env.p, convert(Cint, stage))
 end
 
+function getNumRows()
+	return getNumRows(DSP_FIRST_STAGE) + getNumScenarios() * getNumRows(env,DSP_SECOND_STAGE)
+end
+
 function getNumCols()
-	num = getNumCols(0) + getNumScenarios(env) * getNumCols(env,1)
-	return num
+	return getNumCols(DSP_FIRST_STAGE) + getNumScenarios() * getNumCols(env,DSP_SECOND_STAGE)
 end
 
 function getObjCoef()

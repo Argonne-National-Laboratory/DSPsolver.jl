@@ -18,7 +18,7 @@ function setWallLimit(lim::Number)
 	@dsp_ccall("setWallLimit", Void, (Ptr{Void}, Cdouble), env.p, convert(Cdouble, lim))
 end
 
-function setIntRelax(stage::Integer)
+function setIntRelax(stage)
 	@dsp_ccall("setIntRelax", Void, (Ptr{Void}, Cint), env.p, convert(Cint, stage))
 end
 

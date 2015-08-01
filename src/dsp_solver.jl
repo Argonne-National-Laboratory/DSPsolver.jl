@@ -3,7 +3,7 @@ function freeSolver()
 	@dsp_ccall("freeTssSolver", Void, (Ptr{Void},), env.p)
 end
 
-function evaluateSolution(solution)
+function evaluateSolution(solution::Vector{Cdouble})
 	@dsp_ccall("evaluateSolution", Void, (Ptr{Void}, Ptr{Cdouble}), env.p, convert(Vector{Cdouble}, solution))
 end
 
@@ -26,7 +26,7 @@ else
 	error("MPI package should be used.");
 end
 
-function solve(solver::Int)
+function solve(solver)
 	if solver == DSP_SOLVER_DE
 		solveDe();
 	elseif solver == DSP_SOLVER_BD

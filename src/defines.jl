@@ -19,6 +19,12 @@ const DSP_SOLVER_DE = 0;
 const DSP_SOLVER_BD = 1;
 const DSP_SOLVER_DD = 2;
 
+const DSP_FIRST_STAGE  = 0;
+const DSP_SECOND_STAGE = 1;
+
+const DSP_NO  = 0;
+const DSP_YES = 1;
+
 type Env
 	p::Ptr{Void}
 	solver::Int
