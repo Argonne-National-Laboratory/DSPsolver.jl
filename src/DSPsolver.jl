@@ -39,5 +39,6 @@ include("set_dd.jl")
 include("set_scip.jl")
 include("dsp_model.jl")
 include("dsp_solver.jl")
+include("dsp_dec.jl")
 
 end # module

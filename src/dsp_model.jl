@@ -10,9 +10,7 @@ function readSmps(filename)
 	setDdProcIdxSet(proc_idx_set);  
 end
 
-function loadProblem(model::JuMP.Model)
-	# Check pointer to TssModel
-	check_problem()
+function loadStochasticProblem(model::JuMP.Model)
 	# get scenario problem
 	stoch = StochJuMP.getStochastic(model)
 	
@@ -25,7 +23,7 @@ function loadProblem(model::JuMP.Model)
 	if isdefined(:MPI) == true && MPI.Initialized() == true
 		proc_idx_set = StochJuMP.getProcIdxSet(model);
 	end
-	setDdProcIdxSet(proc_idx_set);  
+	setDdProcIdxSet(proc_idx_set);
 	for s in 1:length(proc_idx_set)
 		ncols2 = convert(Cint, stoch.children[s].numCols)
 		nrows2 = convert(Cint, length(stoch.children[s].linconstr))
@@ -57,9 +55,30 @@ function loadProblem(model::JuMP.Model)
 	
 end
 
+function loadDeterministicProblem(model::JuMP.Model)
+	ncols = convert(Cint, model.numCols)
+	nrows = convert(Cint, length(model.linconstr))
+	start, index, value, clbd, cubd, ctype, obj, rlbd, rubd = getDataFormat(model)
+	numels = length(index)
+	@dsp_ccall("loadDeterministic", Void, 
+		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+		env.p, start, index, value, numels, ncols, nrows, clbd, cubd, ctype, obj, rlbd, rubd)
+end
+
+function loadProblem(model::JuMP.Model)
+	# Check pointer to model
+	check_problem()
+
+	if haskey(model.ext, :Stochastic)
+		loadStochasticProblem(model)
+	else
+		loadDeterministicProblem(model)
+	end
+end
+
 
 function freeModel()
-	check_problem(env)
-	@dsp_ccall("freeTssModel", Void, (Ptr{Void},), env.p)
+	check_problem()
+	@dsp_ccall("freeModel", Void, (Ptr{Void},), env.p)
 end
 
