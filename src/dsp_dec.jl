@@ -3,7 +3,7 @@
 
 type CouplingConstraints
 	couplingConstraints::Vector{JuMP.LinearConstraint}
-	varBlocks::Dict{JuMP.Variable, Int}
+	varSubproblems::Dict{JuMP.Variable, Int}
 end
 
 # Default constructor
@@ -11,9 +11,14 @@ function CouplingConstraints()
 	return CouplingConstraints(JuMP.LinearConstraint[], (JuMP.Variable => Int)[]);
 end
 
-function loadDecomposition(m::JuMP.Model, cc::CouplingConstraints)
+# No need to load this explicitly, should be called by loadProblem
+function loadDecomposition(m::JuMP.Model)
 	# Check pointer to model
 	check_problem();
+
+	if !haskey(m.ext, :DSP_Decomposition)
+		error("No decomposition to load");
+	end
 
 	# Map from Model to the first column of the model in extensive form
 	startingCol = (JuMP.Model => Int)[];
@@ -26,8 +31,14 @@ function loadDecomposition(m::JuMP.Model, cc::CouplingConstraints)
 		end
 	end
 
-	# Extract constraints to arrays
-	constrs = cc.couplingConstraints;
+	cc = m.ext[:DSP_Decomposition]
+
+	constrs = cc.couplingConstraints
+	if length(constrs) == 0
+		error("General decomposition incomplete: Variables were set to subproblems, but no coupling constraints were specified");
+	end
+
+	# Convert constraints to arrays
 	couplingStarts = Int[];
 	couplingCols = Int[];
 	couplingCoeffs = Float64[];
@@ -69,25 +80,24 @@ function loadDecomposition(m::JuMP.Model, cc::CouplingConstraints)
 		end
 	end
 
-	# Extract varBlocks to array
-	varBlocksArray = zeros(Int, ncols);
-	for (var, block) in cc.varBlocks
-		varBlocksArray[startingCol[var.m] + var.col] = block;
+	# Extract varSubproblems to array
+	varSubproblemsArray = zeros(Int, ncols);
+	for (var, block) in cc.varSubproblems
+		varSubproblemsArray[startingCol[var.m] + var.col] = block;
 	end
-	for p in varBlocksArray
+	for p in varSubproblemsArray
 		if p <= 0
-			println("Error: Variable without block found (identifiers must be positive)");
-			exit();
+			error("General decomposition incomplete: Variable was not set to a subproblem (identifiers must be positive)");
 		end
 	end
 
 	# Load coupling constraints into DSP
 	@dsp_ccall("loadDecomposition", Void, (Ptr{Void}, Cint, Cint, Cint, Ptr{Cint}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cchar}, Ptr{Cdouble}),
 		env.p,
-		convert(Cint, maximum(varBlocksArray)),
-		convert(Cint, length(varBlocksArray)),
+		convert(Cint, maximum(varSubproblemsArray)),
+		convert(Cint, length(varSubproblemsArray)),
 		convert(Cint, length(couplingStarts) - 1),          # last element of starts only indicates end
-		convert(Vector{Cint}, varBlocksArray .- one(Int)), # adjust indices to start at zero
+		convert(Vector{Cint}, varSubproblemsArray .- one(Int)), # adjust indices to start at zero
 		convert(Vector{Cint}, couplingStarts .- one(Int)),  # adjust indices to start at zero
 		convert(Vector{Cint}, couplingCols .- one(Int)),    # adjust indices to start at zero
 		convert(Vector{Cdouble}, couplingCoeffs),
@@ -95,10 +105,33 @@ function loadDecomposition(m::JuMP.Model, cc::CouplingConstraints)
 		convert(Vector{Cdouble}, couplingRhs))
 end
 
-function addCouplingConstraint(cc::CouplingConstraints, constr::JuMP.LinearConstraint)
-	push!(cc.couplingConstraints, constr);
+function initDecomposition(m::JuMP.Model)
+	if haskey(m.ext, :DSP_Decomposition)
+		return
+	end
+	m.ext[:DSP_Decomposition] = CouplingConstraints();
 end
 
-function addVarBlocks(cc::CouplingConstraints, varBlocks::Dict{JuMP.Variable, Int})
-	cc.varBlocks = varBlocks;
+
+## External functions
+
+function addCouplingConstraint(m::JuMP.Model, constr::JuMP.LinearConstraint)
+	mod = m;
+	# It does not matter whether m is the parent model or a stochastic block (child); all info is added to parent
+	while haskey(mod.ext, :Stochastic) && StochJuMP.getparent(mod) != nothing
+		mod = StochJuMP.getparent(mod);
+	end
+
+	initDecomposition(mod);
+	push!(mod.ext[:DSP_Decomposition].couplingConstraints, constr);
+end
+
+function setVarSubproblem(m::JuMP.Model, var::JuMP.Variable, subproblem::Integer)
+	mod = m;
+	while haskey(mod.ext, :Stochastic) && StochJuMP.getparent(mod) != nothing
+		mod = StochJuMP.getparent(mod);
+	end
+
+	initDecomposition(mod);
+	mod.ext[:DSP_Decomposition].varSubproblems[var] = subproblem;
 end

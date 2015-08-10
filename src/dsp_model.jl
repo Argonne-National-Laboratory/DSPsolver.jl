@@ -74,6 +74,10 @@ function loadProblem(model::JuMP.Model)
 	else
 		loadDeterministicProblem(model)
 	end
+
+	if haskey(model.ext, :DSP_Decomposition)
+		loadDecomposition(model)
+	end
 end
 
 
