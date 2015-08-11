@@ -36,3 +36,10 @@ function setDdStoppingTolerance(tol::Number)
         @dsp_ccall("setDdStoppingTolerance", Void, (Ptr{Void}, Cdouble), env.p, convert(Cdouble, tol))
 end
 
+function setDdTrustRegionSize(num::Integer)
+	@dsp_ccall("setDdTrustRegionSize", Void, (Ptr{Void}, Cint), env.p, convert(Cint, num))
+end
+
+function setDdDisableTrustRegionDecrease(yesNo::Bool)
+	@dsp_ccall("setDdDisableTrustRegionDecrease", Void, (Ptr{Void}, Cuchar), env.p, convert(Cuchar, yesNo))
+end

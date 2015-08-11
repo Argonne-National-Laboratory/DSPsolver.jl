@@ -1,6 +1,6 @@
 function freeSolver()
 	check_problem()
-	@dsp_ccall("freeTssSolver", Void, (Ptr{Void},), env.p)
+	@dsp_ccall("freeSolver", Void, (Ptr{Void},), env.p)
 end
 
 function evaluateSolution(solution::Vector{Cdouble})

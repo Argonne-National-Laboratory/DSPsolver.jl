@@ -46,7 +46,7 @@ function getNumRows()
 end
 
 function getNumCols()
-	return getNumCols(DSP_FIRST_STAGE) + getNumScenarios() * getNumCols(DSP_SECOND_STAGE)
+	return @dsp_ccall("getTotalNumCols", Cint, (Ptr{Void},), env.p)
 end
 
 function getObjCoef()

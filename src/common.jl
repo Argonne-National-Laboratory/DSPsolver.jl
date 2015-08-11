@@ -24,6 +24,10 @@ function check_problem()
 end
 
 function prepConstrMatrix(m::JuMP.Model)
+    if !haskey(m.ext, :Stochastic)
+        return JuMP.prepConstrMatrix(m)
+    end
+
     stoch = StochJuMP.getStochastic(m)
     if stoch.parent == nothing
     	return JuMP.prepConstrMatrix(m)
