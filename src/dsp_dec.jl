@@ -8,7 +8,7 @@ end
 
 # Default constructor
 function CouplingConstraints()
-	return CouplingConstraints(JuMP.LinearConstraint[], (JuMP.Variable => Int)[]);
+	return CouplingConstraints(JuMP.LinearConstraint[], Dict{JuMP.Variable,Int}());
 end
 
 # No need to load this explicitly, should be called by loadProblem
@@ -21,7 +21,7 @@ function loadDecomposition(m::JuMP.Model)
 	end
 
 	# Map from Model to the first column of the model in extensive form
-	startingCol = (JuMP.Model => Int)[];
+	startingCol = Dict{JuMP.Model,Int}();
  	startingCol[m] = 0;
  	ncols = m.numCols;
 	if haskey(m.ext, :Stochastic)

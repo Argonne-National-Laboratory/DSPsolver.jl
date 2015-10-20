@@ -19,6 +19,12 @@ const DSP_SOLVER_DE = 0;
 const DSP_SOLVER_BD = 1;
 const DSP_SOLVER_DD = 2;
 
+const SIMPLEX     = 0;
+const IPM         = 1;
+const IPM_FEAS    = 2;
+const DSBM        = 3;
+const SUBGRADIENT = 4;
+
 const DSP_FIRST_STAGE  = 0;
 const DSP_SECOND_STAGE = 1;
 

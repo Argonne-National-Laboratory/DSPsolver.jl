@@ -1,7 +1,7 @@
 function readSmps(filename)
 	# Check pointer to TssModel
 	check_problem()
-	@dsp_ccall("readSmps", Void, (Ptr{Void}, Ptr{Uint8}), env.p, convert(Vector{Uint8}, filename))
+	@dsp_ccall("readSmps", Void, (Ptr{Void}, Ptr{UInt8}), env.p, convert(Vector{UInt8}, filename))
 	nscen = getNumScenarios();
 	proc_idx_set = 1:nscen;
 	if isdefined(:MPI) == true
