@@ -1,3 +1,4 @@
+# Return type
 const DSP_STAT_OPTIMAL          = 3000;
 const DSP_STAT_PRIM_INFEASIBLE  = 3001;
 const DSP_STAT_DUAL_INFEASIBLE  = 3002;
@@ -15,10 +16,12 @@ const DSP_STAT_LIM_PRIM_OBJ     = 3014;
 const DSP_STAT_LIM_DUAL_OBJ     = 3015;
 const DSP_STAT_UNKNOWN          = 3999;
 
+# Algorithm Type
 const DSP_SOLVER_DE = 0;
 const DSP_SOLVER_BD = 1;
 const DSP_SOLVER_DD = 2;
 
+# Master algorithm of Dual decomposition
 const SIMPLEX     = 0;
 const IPM         = 1;
 const IPM_FEAS    = 2;
