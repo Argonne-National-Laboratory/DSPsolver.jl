@@ -39,7 +39,7 @@ function loadStochasticProblem(model::JuMP.Model)
 	start, index, value, clbd, cubd, ctype, obj, rlbd, rubd = getDataFormat(model)
 	
 	@dsp_ccall("loadFirstStage", Void, 
-		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{UInt8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
 		env.p, start, index, value, clbd, cubd, ctype, obj, rlbd, rubd)
 	
 	for s in 1:length(proc_idx_set)
@@ -49,7 +49,7 @@ function loadStochasticProblem(model::JuMP.Model)
 		# get model data
 		start, index, value, clbd, cubd, ctype, obj, rlbd, rubd = getDataFormat(sb)
 		@dsp_ccall("loadSecondStage", Void, 
-			(Ptr{Void}, Cint, Cdouble, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+			(Ptr{Void}, Cint, Cdouble, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{UInt8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
 			env.p, proc_idx_set[s]-1, probability, start, index, value, clbd, cubd, ctype, obj, rlbd, rubd)
 	end
 	
@@ -61,7 +61,7 @@ function loadDeterministicProblem(model::JuMP.Model)
 	start, index, value, clbd, cubd, ctype, obj, rlbd, rubd = getDataFormat(model)
 	numels = length(index)
 	@dsp_ccall("loadDeterministic", Void, 
-		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{UInt8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
 		env.p, start, index, value, numels, ncols, nrows, clbd, cubd, ctype, obj, rlbd, rubd)
 end
 

@@ -10,7 +10,7 @@ function setDblParam(name::AbstractString, value::Number)
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cdouble), env.p, name, convert(Cdouble, value))
 end
 
-function setStrParam(name::AbstractString, value::String)
+function setStrParam(name::AbstractString, value::AbstractString)
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cstring), env.p, name, convert(Cstring, value))
 end
 
