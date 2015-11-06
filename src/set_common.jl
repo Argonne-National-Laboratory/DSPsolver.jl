@@ -1,21 +1,21 @@
 function setBoolParam(name::AbstractString, value::Bool)
-	@dsp_ccall("setBoolParam", Void, (Ptr{Void}, Cstring, Cuchar), env.p, name, convert(Cuchar, value))
+	@dsp_ccall("setBoolParam", Void, (Ptr{Void}, Ptr{UInt8}, Cuchar), env.p, name, convert(Cuchar, value))
 end
 
 function setIntParam(name::AbstractString, value::Integer)
-	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cint), env.p, name, convert(Cint, value))
+	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint), env.p, name, convert(Cint, value))
 end
 
 function setDblParam(name::AbstractString, value::Number)
-	@dsp_ccall("setDblParam", Void, (Ptr{Void}, Cstring, Cdouble), env.p, name, convert(Cdouble, value))
+	@dsp_ccall("setDblParam", Void, (Ptr{Void}, Ptr{UInt8}, Cdouble), env.p, name, convert(Cdouble, value))
 end
 
 function setStrParam(name::AbstractString, value::AbstractString)
-	@dsp_ccall("setStrParam", Void, (Ptr{Void}, Cstring, Cstring), env.p, name, convert(Cstring, value))
+	@dsp_ccall("setStrParam", Void, (Ptr{Void}, Ptr{UInt8}, Ptr{UInt8}), env.p, name, value)
 end
 
 function setBoolPtrParam(name::AbstractString, size::Integer, value::Array{Bool,1})
-	@dsp_ccall("setBoolPtrParam", Void, (Ptr{Void}, Cstring, Cint, Ptr{Cuchar}), env.p, name, convert(Cint, size), convert(Vector{Cuchar}, value))
+	@dsp_ccall("setBoolPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Ptr{Cuchar}), env.p, name, convert(Cint, size), convert(Vector{Cuchar}, value))
 end
 
 function setIntPtrParam(name::AbstractString, size::Integer, value::Array{Int,1})
