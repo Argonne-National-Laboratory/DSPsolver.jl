@@ -21,7 +21,7 @@ function getDataFormat(model::JuMP.Model)
 			ctype = ctype * "C";
 		end
 	end
-	ctype = convert(Vector{Uint8}, ctype)
+	ctype = convert(Vector{UInt8}, ctype)
 	
 	# objective coefficients
 	obj, rlbd, rubd = JuMP.prepProblemBounds(model)
