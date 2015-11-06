@@ -19,6 +19,7 @@ function setBoolPtrParam(name::AbstractString, size::Integer, value::Array{Bool,
 end
 
 function setIntPtrParam(name::AbstractString, size::Integer, value::Array{Int,1})
+	println(name, size, value);
 	@dsp_ccall("setIntPtrParam", Void, (Ptr{Void}, Cstring, Cint, Ptr{Cint}), env.p, name, convert(Cint, size), convert(Vector{Cint}, value))
 end
 
