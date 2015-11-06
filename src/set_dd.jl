@@ -1,6 +1,8 @@
 function setDdProcIdxSet(scenarios::Array{Int,1})
 	num = convert(Cint, length(scenarios));
 	scenarios = convert(Vector{Cint}, scenarios) - 1;
+	println(num);
+	println(scenarios);
 	setIntPtrParam("DD/ARR_PROC_IDX", num, scenarios);
 	# @dsp_ccall("setDdProcIdxSet", Void, (Ptr{Void}, Cint, Ptr{Cint}), env.p, num, scenarios)
 end
