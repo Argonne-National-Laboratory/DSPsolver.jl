@@ -7,7 +7,7 @@ This package requires the StochJuMP.jl and MPI.jl packages for Julia. The [Stoch
 ## Installation
 You can install DSPsolver.jl using the Julia package system.
 ```julia
-Pkg.clone("https://github.com/kibaekkim/DSPsolver.jl");
+Pkg.clone("https://github.com/Argonne-National-Laboratory/DSPsolver.jl");
 ```
 
 ## Example
