@@ -19,7 +19,7 @@ function setBoolPtrParam(name::AbstractString, size::Integer, value::Array{Bool,
 end
 
 function setIntPtrParam(name::AbstractString, size::Integer, value::Array{Int,1})
-	@dsp_ccall("setIntPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Ptr{Cint}), env.p, convert(Ptr{UInt8}, name), convert(Cint, size), convert(Vector{Cint}, value))
+	@dsp_ccall("setIntPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Ptr{Cint}), env.p, name, convert(Cint, size), convert(Vector{Cint}, value))
 end
 
 function setLogLevel(level::Integer)
