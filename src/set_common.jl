@@ -1,24 +1,24 @@
-function setBoolParam(name::String, value::Bool)
+function setBoolParam(name::AbstractString, value::Bool)
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cuchar), env.p, name, convert(Cuchar, value))
 end
 
-function setIntParam(name::String, value::Integer)
+function setIntParam(name::AbstractString, value::Integer)
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cint), env.p, name, convert(Cint, value))
 end
 
-function setDblParam(name::String, value::Number)
+function setDblParam(name::AbstractString, value::Number)
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cdouble), env.p, name, convert(Cdouble, value))
 end
 
-function setStrParam(name::String, value::String)
+function setStrParam(name::AbstractString, value::String)
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cstring), env.p, name, convert(Cstring, value))
 end
 
-function setBoolPtrParam(name::String, size::Integer, value::Array{Bool,1})
+function setBoolPtrParam(name::AbstractString, size::Integer, value::Array{Bool,1})
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cint, Cuchar), env.p, name, size, convert(Vector{Cuchar}, value))
 end
 
-function setIntPtrParam(name::String, size::Integer, value::Array{Integer,1})
+function setIntPtrParam(name::AbstractString, size::Integer, value::Array{Integer,1})
 	@dsp_ccall("setIntParam", Void, (Ptr{Void}, Cstring, Cint, Cuchar), env.p, name, size, convert(Vector{Cint}, value))
 end
 
