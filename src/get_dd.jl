@@ -30,10 +30,21 @@ function getDdMasterObjValues()
 	return vals
 end
 
-function getDdSubproblemObjValues()
-	num = @dsp_ccall("getDdNumSubproblemObjValues", Cint, (Ptr{Void},), env.p)
+function getDdSubPrimalBounds()
+	num = @dsp_ccall("getDdNumSubPrimalBounds", Cint, (Ptr{Void},), env.p)
 	vals = Array(Cdouble, num)
-	@dsp_ccall("getDdSubproblemObjValues", Void, (Ptr{Void}, Ptr{Cdouble}), env.p, vals)
+	@dsp_ccall("getDdSubPrimalBounds", Void, (Ptr{Void}, Ptr{Cdouble}), env.p, vals)
+	return vals
+end
+
+function getDdSubproblemObjValues()
+	return getDdSubPrimalBounds()
+end
+
+function getDdSubDualBounds()
+	num = @dsp_ccall("getDdNumSubDualBounds", Cint, (Ptr{Void},), env.p)
+	vals = Array(Cdouble, num)
+	@dsp_ccall("getDdSubDualBounds", Void, (Ptr{Void}, Ptr{Cdouble}), env.p, vals)
 	return vals
 end
 
