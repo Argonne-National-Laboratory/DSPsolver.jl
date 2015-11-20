@@ -26,8 +26,8 @@ end
 
 if isdefined(:MPI)
 	solveDd() = solveDd(MPI.COMM_WORLD);
-	solveBdMpi() = solveBdMpi(MPI.COMM_WORLD);
 	solveBdMpi(nauxvars) = solveBdMpi(nauxvars, MPI.COMM_WORLD);
+	solveBdMpi() = solveBdMpi(1);
 else
 	error("MPI package should be used.");
 end
