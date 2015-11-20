@@ -37,6 +37,8 @@ function solve(solver)
 		solveDe();
 	elseif solver == DSP_SOLVER_BD
 		solveBd();
+	elseif solver == DSP_SOLVER_BD_MPI
+		solveBdMpi();
 	elseif solver == DSP_SOLVER_DD
 		solveDd();
 	end

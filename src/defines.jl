@@ -17,9 +17,10 @@ const DSP_STAT_LIM_DUAL_OBJ     = 3015;
 const DSP_STAT_UNKNOWN          = 3999;
 
 # Algorithm Type
-const DSP_SOLVER_DE = 0;
-const DSP_SOLVER_BD = 1;
-const DSP_SOLVER_DD = 2;
+const DSP_SOLVER_DE     = 0;
+const DSP_SOLVER_BD     = 1;
+const DSP_SOLVER_BD_MPI = 2;
+const DSP_SOLVER_DD     = 3;
 
 # Master algorithm of Dual decomposition
 const SIMPLEX     = 0;
