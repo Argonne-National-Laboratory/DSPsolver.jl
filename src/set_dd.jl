@@ -1,8 +1,6 @@
 function setDdProcIdxSet(scenarios::Array{Int,1})
-	setIntPtrParam("DD/ARR_PROC_IDX", length(scenarios), scenarios);
-	# num = convert(Cint, length(scenarios));
-	# scenarios = convert(Vector{Cint}, scenarios) - 1;
-	# @dsp_ccall("setDdProcIdxSet", Void, (Ptr{Void}, Cint, Ptr{Cint}), env.p, num, scenarios)
+	println("WARNING: setDdProcIdxSet() is deprecated. Please use setProcIdxSet() instead.");
+	setProcIdxSet(scenarios);
 end
 
 function setDdAddFeasCuts(freq::Integer)

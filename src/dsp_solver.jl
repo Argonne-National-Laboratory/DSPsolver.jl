@@ -16,12 +16,18 @@ function solveBd(nauxvars::Integer)
 end
 solveBd() = solveBd(1);
 
+function solveBdMpi(nauxvars::Integer, comm)
+	@dsp_ccall("solveBdMpi", Void, (Ptr{Void}, Cint, Cint), env.p, convert(Cint, nauxvars), convert(Cint, comm.val))
+end
+
 function solveDd(comm)
 	@dsp_ccall("solveDd", Void, (Ptr{Void}, Cint), env.p, convert(Cint, comm.val))
 end
 
 if isdefined(:MPI)
 	solveDd() = solveDd(MPI.COMM_WORLD);
+	solveBdMpi() = solveBdMpi(MPI.COMM_WORLD);
+	solveBdMpi(nauxvars) = solveBdMpi(nauxvars, MPI.COMM_WORLD);
 else
 	error("MPI package should be used.");
 end

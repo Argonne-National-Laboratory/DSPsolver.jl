@@ -7,7 +7,7 @@ function readSmps(filename)
 	if isdefined(:MPI) == true
 		proc_idx_set = StochJuMP.getProcIdxSet(nscen);
 	end
-	setDdProcIdxSet(proc_idx_set);  
+	setProcIdxSet(proc_idx_set);  
 end
 
 function loadStochasticProblem(model::JuMP.Model)
@@ -23,7 +23,7 @@ function loadStochasticProblem(model::JuMP.Model)
 	if isdefined(:MPI) == true && MPI.Initialized() == true
 		proc_idx_set = StochJuMP.getProcIdxSet(model);
 	end
-	setDdProcIdxSet(proc_idx_set);
+	setProcIdxSet(proc_idx_set);
 	for s in 1:length(proc_idx_set)
 		ncols2 = convert(Cint, stoch.children[s].numCols)
 		nrows2 = convert(Cint, length(stoch.children[s].linconstr))

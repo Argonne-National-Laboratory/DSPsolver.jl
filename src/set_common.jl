@@ -46,3 +46,7 @@ function setIntRelax(stage)
 	@dsp_ccall("setIntRelax", Void, (Ptr{Void}, Cint), env.p, convert(Cint, stage))
 end
 
+function setProcIdxSet(scenarios::Array{Int,1})
+	num = convert(Cint, length(scenarios));
+	setIntPtrParam("ARR_PROC_IDX", num, scenarios);
+end
