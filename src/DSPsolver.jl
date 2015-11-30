@@ -26,6 +26,7 @@ export DSP_STAT_LIM_PRIM_OBJ
 export DSP_STAT_LIM_DUAL_OBJ
 export DSP_STAT_UNKNOWN
 
+include("compatibility.jl")
 include("defines.jl")
 include("common.jl")
 
