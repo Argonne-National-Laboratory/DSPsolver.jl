@@ -59,7 +59,7 @@ end
 
 # Set initial solution
 # - This function can be called multiple times for setting multiple solutions.
-function setSolution(solution::Array{Number,1})
+function setSolution(solution::Array{Cdouble,1})
 	num = convert(Cint, length(solution));
-	@dsp_ccall("setSolution", Void, (Ptr{Void}, Cint, Ptr{Number}), env.p, num, solution);
+	@dsp_ccall("setSolution", Void, (Ptr{Void}, Cint, Ptr{Cdouble}), env.p, num, solution);
 end
