@@ -50,3 +50,16 @@ function setProcIdxSet(scenarios::Array{Int,1})
 	num = convert(Cint, length(scenarios));
 	setIntPtrParam("ARR_PROC_IDX", num, scenarios);
 end
+
+# Set branch priorities
+function setBranchPriorities(priorities::Array{Int,1})
+	num = convert(Cint, length(priorities));
+	@dsp_ccall("setBranchPrioties", Void, (Ptr{Void}, Cint, Ptr{Cint}), env.p, num, priorities);
+end
+
+# Set initial solution
+# - This function can be called multiple times for setting multiple solutions.
+function setSolution(solution::Array{Number,1})
+	num = convert(Cint, length(solution));
+	@dsp_ccall("setSolution", Void, (Ptr{Void}, Cint, Ptr{Number}), env.p, num, solution);
+end
