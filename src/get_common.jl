@@ -1,3 +1,32 @@
+function getProcIdxSet(numScens::Integer, dedicatedMaster::Bool)
+	mysize = 1;
+	myrank = 0;
+	if isdefined(:MPI) == true && MPI.Initialized() == true
+		comm = MPI.COMM_WORLD
+		mysize = MPI.Comm_size(comm)
+		myrank = MPI.Comm_rank(comm)
+	end
+	# Round-and-Robin
+	proc_idx_set = Int[];
+	# DSP is further parallelized with mysize > numScens.
+	modrank = myrank % numScens;
+	
+	if dedicatedMaster == true
+		if myrank == 0
+			return proc_idx_set;
+		end
+		# exclude master
+		mysize -= 1;
+		modrank = (myrank-1) % numScens;
+	end
+	
+	for s = modrank:mysize:(numScens-1)
+		push!(proc_idx_set, s+1);
+	end
+	return proc_idx_set;
+end
+getProcIdxSet(numScens::Integer) = getProcIdxSet(numScens,false);
+
 function getDataFormat(model::JuMP.Model)
 	# Get a column-wise sparse matrix
 	mat = prepConstrMatrix(model)
