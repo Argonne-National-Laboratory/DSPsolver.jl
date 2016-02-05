@@ -1,16 +1,17 @@
-function readSmps(filename)
+function readSmps(filename, dedicatedMaster::Bool)
 	# Check pointer to TssModel
 	check_problem()
 	@dsp_ccall("readSmps", Void, (Ptr{Void}, Ptr{UInt8}), env.p, convert(Vector{UInt8}, filename))
 	nscen = getNumScenarios();
 	proc_idx_set = 1:nscen;
 	if isdefined(:MPI) == true
-		proc_idx_set = StochJuMP.getProcIdxSet(nscen);
+		proc_idx_set = getProcIdxSet(nscen, dedicatedMaster);
 	end
 	setProcIdxSet(proc_idx_set);  
 end
+readSmps(filename) = readSmps(filename, false);
 
-function loadStochasticProblem(model::JuMP.Model)
+function loadStochasticProblem(model::JuMP.Model, dedicatedMaster::Bool)
 	# get scenario problem
 	stoch = StochJuMP.getStochastic(model)
 	
@@ -21,7 +22,7 @@ function loadStochasticProblem(model::JuMP.Model)
 	nrows2 = 0
 	proc_idx_set = collect(1:nscen);
 	if isdefined(:MPI) == true && MPI.Initialized() == true
-		proc_idx_set = StochJuMP.getProcIdxSet(model);
+		proc_idx_set = getProcIdxSet(model, dedicatedMaster);
 	end
 	setProcIdxSet(proc_idx_set);
 	for s in 1:length(proc_idx_set)
@@ -65,24 +66,23 @@ function loadDeterministicProblem(model::JuMP.Model)
 		env.p, start, index, value, numels, ncols, nrows, clbd, cubd, ctype, obj, rlbd, rubd)
 end
 
-function loadProblem(model::JuMP.Model)
+function loadProblem(model::JuMP.Model, dedicatedMaster::Bool)
 	# Check pointer to model
 	check_problem()
 
 	if haskey(model.ext, :Stochastic)
-		loadStochasticProblem(model)
+		loadStochasticProblem(model, dedicatedMaster);
 	else
-		loadDeterministicProblem(model)
+		loadDeterministicProblem(model);
 	end
 
 	if haskey(model.ext, :DSP_Decomposition)
-		loadDecomposition(model)
+		loadDecomposition(model);
 	end
 end
-
+loadProblem(model) = loadProblem(model, false);
 
 function freeModel()
 	check_problem()
 	@dsp_ccall("freeModel", Void, (Ptr{Void},), env.p)
 end
-
