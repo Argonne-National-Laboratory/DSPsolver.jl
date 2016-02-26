@@ -28,6 +28,7 @@ const IPM         = 1;
 const IPM_FEAS    = 2;
 const DSBM        = 3;
 const SUBGRADIENT = 4;
+const REG_BUNDLE  = 5;
 
 const DSP_FIRST_STAGE  = 0;
 const DSP_SECOND_STAGE = 1;
