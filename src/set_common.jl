@@ -14,12 +14,12 @@ function setStrParam(name::AbstractString, value::AbstractString)
 	@dsp_ccall("setStrParam", Void, (Ptr{Void}, Ptr{UInt8}, Ptr{UInt8}), env.p, name, value)
 end
 
-function setBoolPtrParam(name::AbstractString, size::Integer, value::Array{Bool,1})
-	@dsp_ccall("setBoolPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Ptr{Cuchar}), env.p, name, convert(Cint, size), convert(Vector{Cuchar}, value))
+function setBoolPtrParam(name::AbstractString, size::Integer, value::Bool)
+	@dsp_ccall("setBoolPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Cuchar), env.p, name, convert(Cint, size), convert(Cuchar, value))
 end
 
-function setIntPtrParam(name::AbstractString, size::Integer, value::Array{Int,1})
-	@dsp_ccall("setIntPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Ptr{Cint}), env.p, name, convert(Cint, size), convert(Vector{Cint}, value))
+function setIntPtrParam(name::AbstractString, size::Integer, value::Int)
+	@dsp_ccall("setIntPtrParam", Void, (Ptr{Void}, Ptr{UInt8}, Cint, Cint), env.p, name, convert(Cint, size), convert(Cint, value))
 end
 
 function setLogLevel(level::Integer)
