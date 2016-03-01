@@ -48,6 +48,7 @@ end
 
 function setProcIdxSet(scenarios::Array{Int,1})
 	num = convert(Cint, length(scenarios));
+	scenarios = scenarios - 1;
 	setIntPtrParam("ARR_PROC_IDX", num, scenarios);
 end
 
