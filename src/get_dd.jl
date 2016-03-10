@@ -17,31 +17,21 @@ end
 # master solution wall time per iteration
 # history of master primal objective values
 # history of master dual objective values
-for (func,name) in [(:getDdMasterCpuTimes,"getDdMasterCpuTimes"),
-		    (:getDdMasterWallTimes,"getDdMasterWallTimes"),
-		    (:getDdMasterPrimalBounds,"getDdMasterPrimalBounds"),
-		    (:getDdMasterDualBounds,"getDdMasterDualBounds")]
-	@eval begin
-		function $func()
-			size = getDdNumMasterSolved()
-			val = Array(Cdouble, size)
-			@dsp_ccall($name, Void, (Ptr{Void}, Ptr{Cdouble}), env.p, val)
-			return val
-		end
-	end
-end
-
 # subproblem solution cpu time per iteration
 # subproblem solution wall time per iteration
 # history of subproblem primal objective values
 # history of subproblem dual objective values
-for (func,name) in [(:getDdSubproblemCpuTimes,"getDdSubproblemCpuTimes"),
-		    (:getDdSubproblemWallTimes,"getDdSubproblemWallTimes"),
-		    (:getDdSubproblemPrimalBounds,"getDdSubproblemPrimalBounds"),
-		    (:getDdSubproblemDualBounds,"getDdSubproblemDualBounds")]
+for (func,name,sizefunc) in [(:getDdMasterCpuTimes,"getDdMasterCpuTimes",:getDdNumMasterSolved),
+			     (:getDdMasterWallTimes,"getDdMasterWallTimes",:getDdNumMasterSolved),
+			     (:getDdMasterPrimalBounds,"getDdMasterPrimalBounds",:getDdNumMasterSolved),
+			     (:getDdMasterDualBounds,"getDdMasterDualBounds",:getDdNumMasterSolved),
+			     (:getDdSubproblemCpuTimes,"getDdSubproblemCpuTimes",:getDdNumSubproblemSolved),
+			     (:getDdSubproblemWallTimes,"getDdSubproblemWallTimes",:getDdNumSubproblemSolved),
+			     (:getDdSubproblemPrimalBounds,"getDdSubproblemPrimalBounds",:getDdNumSubproblemSolved),
+			     (:getDdSubproblemDualBounds,"getDdSubproblemDualBounds",:getDdNumSubproblemSolved)]
 	@eval begin
 		function $func()
-			size = getDdNumSubproblemSolved()
+			size = $sizefunc()
 			val = Array(Cdouble, size)
 			@dsp_ccall($name, Void, (Ptr{Void}, Ptr{Cdouble}), env.p, val)
 			return val
