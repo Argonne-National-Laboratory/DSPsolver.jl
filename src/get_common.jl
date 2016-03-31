@@ -15,14 +15,26 @@ function getProcIdxSet(numScens::Integer, dedicatedMaster::Bool)
 		if myrank == 0
 			return proc_idx_set;
 		end
-		# exclude master
 		mysize -= 1;
-		modrank = (myrank-1) % numScens;
+		myrank -= 1;
 	end
 	
-	for s = modrank:mysize:(numScens-1)
-		push!(proc_idx_set, s+1);
+	if mysize > numScens
+		if myrank <= numScens
+			push!(proc_idx_set, myrank+1);
+		else
+			mysize -= numScens;
+			myrank -= numScens;
+			for s = myrank:mysize:(numScens-1)
+				push!(proc_idx_set, s+1);
+			end
+		end
+	else
+		for s = myrank:mysize:(numScens-1)
+			push!(proc_idx_set, s+1);
+		end
 	end
+	
 	return proc_idx_set;
 end
 getProcIdxSet(numScens::Integer) = getProcIdxSet(numScens,false);
