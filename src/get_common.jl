@@ -8,8 +8,6 @@ function getProcIdxSet(numScens::Integer, dedicatedMaster::Bool)
 	end
 	# Round-and-Robin
 	proc_idx_set = Int[];
-	# DSP is further parallelized with mysize > numScens.
-	modrank = myrank % numScens;
 	
 	if dedicatedMaster == true
 		if myrank == 0
@@ -19,8 +17,9 @@ function getProcIdxSet(numScens::Integer, dedicatedMaster::Bool)
 		myrank -= 1;
 	end
 	
+	# DSP is further parallelized with mysize > numScens.
 	if mysize > numScens
-		if myrank <= numScens
+		if myrank < numScens
 			push!(proc_idx_set, myrank+1);
 		else
 			mysize -= numScens;
