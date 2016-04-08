@@ -17,7 +17,7 @@ end
 solveBd() = solveBd(1);
 
 function solveBdMpi(nauxvars::Integer, comm)
-	@dsp_ccall("solveBdMpi", Void, (Ptr{Void}, Cint, Cint), env.p, convert(Cint, nauxvars), convert(Cint, comm.val))
+	@dsp_ccall("solveBd", Void, (Ptr{Void}, Cint, Cint), env.p, convert(Cint, nauxvars), convert(Cint, comm.val))
 end
 
 function solveDd(comm)
