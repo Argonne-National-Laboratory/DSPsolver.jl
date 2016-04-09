@@ -12,7 +12,7 @@ function solveDe()
 end
 
 function solveBd(nauxvars::Integer)
-	@dsp_ccall("solveBd", Void, (Ptr{Void}, Cint), env.p, convert(Cint, nauxvars))
+	@dsp_ccall("solveBd", Void, (Ptr{Void}, Cint, Cint), env.p, convert(Cint, nauxvars), -32766)
 end
 solveBd() = solveBd(1);
 
