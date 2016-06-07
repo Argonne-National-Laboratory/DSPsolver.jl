@@ -17,13 +17,29 @@ function getProcIdxSet(numScens::Integer, dedicatedMaster::Bool)
 		myrank -= 1;
 	end
 	
-	# DSP is further parallelized with mysize > numScens.
-	if mysize > numScens
-		if myrank < numScens
-			push!(proc_idx_set, myrank+1);
+	# Processors with rank > 3*numScens are not used.
+	if myrank >= 3 * numScens
+		return proc_idx_set;
+	end
+	
+	if mysize >= 3 * numScens
+		push!(proc_idx_set, myrank % numScens + 1);
+	elseif mysize >= 2 * numScens
+		if myrank < 2 * numScens
+			push!(proc_idx_set, myrank % numScens + 1);
 		else
-			mysize -= numScens;
+			myrank -= 2*numScens;
+			mysize -= 2*numScens;
+			for s = myrank:mysize:(numScens-1)
+				push!(proc_idx_set, s+1);
+			end
+		end
+	elseif mysize >= numScens
+		if myrank < numScens
+			push!(proc_idx_set, myrank + 1);
+		else
 			myrank -= numScens;
+			mysize -= numScens;
 			for s = myrank:mysize:(numScens-1)
 				push!(proc_idx_set, s+1);
 			end
