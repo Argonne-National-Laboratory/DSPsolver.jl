@@ -1,10 +1,3 @@
-function getSubprobIndices()
-	nsubprobs = @dsp_ccall("getNumSubprobIndices", Cint, (Ptr{Void},), env.p)
-	subprobs = Array(Cint, nsubprobs)
-	@dsp_ccall("getSubprobIndices", Void, (Ptr{Void},Ptr{Cint}), env.p, subprobs)
-	return subprobs
-end
-
 function getProcIdxSet(numScens::Integer, dedicatedMaster::Bool)
 	mysize = 1;
 	myrank = 0;
