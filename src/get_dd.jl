@@ -3,9 +3,11 @@
 
 # number of infeasible solutions evaluated
 # number of master problem solved
+# number of subproblem indices per processor
 for (func,name) in [(:getDdNumInfeasSolutions,"getDdNumInfeasSolutions"),
 		    (:getDdNumMasterSolved,"getDdNumMasterSolved"),
-		    (:getDdNumSubproblemSolved,"getDdNumSubproblemSolved")]
+		    (:getDdNumSubproblemSolved,"getDdNumSubproblemSolved")
+		    (:getNumSubprobIndices,"getNumSubprobIndices")]
 	@eval begin
 		function $func()
 			return @dsp_ccall($name, Cint, (Ptr{Void},), env.p)
@@ -21,6 +23,7 @@ end
 # subproblem solution wall time per iteration
 # history of subproblem primal objective values
 # history of subproblem dual objective values
+# subproblem indices per processor
 for (func,name,sizefunc) in [(:getDdMasterCpuTimes,"getDdMasterCpuTimes",:getDdNumMasterSolved),
 			     (:getDdMasterWallTimes,"getDdMasterWallTimes",:getDdNumMasterSolved),
 			     (:getDdMasterPrimalBounds,"getDdMasterPrimalBounds",:getDdNumMasterSolved),
@@ -28,7 +31,8 @@ for (func,name,sizefunc) in [(:getDdMasterCpuTimes,"getDdMasterCpuTimes",:getDdN
 			     (:getDdSubproblemCpuTimes,"getDdSubproblemCpuTimes",:getDdNumSubproblemSolved),
 			     (:getDdSubproblemWallTimes,"getDdSubproblemWallTimes",:getDdNumSubproblemSolved),
 			     (:getDdSubproblemPrimalBounds,"getDdSubproblemPrimalBounds",:getDdNumSubproblemSolved),
-			     (:getDdSubproblemDualBounds,"getDdSubproblemDualBounds",:getDdNumSubproblemSolved)]
+			     (:getDdSubproblemDualBounds,"getDdSubproblemDualBounds",:getDdNumSubproblemSolved)
+			     (:getSubprobIndices,"getSubprobIndices",:getNumSubprobIndices)]
 	@eval begin
 		function $func()
 			size = $sizefunc()
