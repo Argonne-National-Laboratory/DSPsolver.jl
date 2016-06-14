@@ -5,7 +5,7 @@ function readSmps(filename, dedicatedMaster::Bool)
 	nscen = getNumScenarios();
 	proc_idx_set = 1:nscen;
 	if isdefined(:MPI) == true
-		proc_idx_set = getSubprobIndices();#getProcIdxSet(nscen, dedicatedMaster);
+		proc_idx_set = getProcIdxSet(nscen, dedicatedMaster);
 	end
 	setProcIdxSet(proc_idx_set);  
 end
@@ -22,7 +22,7 @@ function loadStochasticProblem(model::JuMP.Model, dedicatedMaster::Bool)
 	nrows2 = 0
 	proc_idx_set = collect(1:nscen);
 	if isdefined(:MPI) == true && MPI.Initialized() == true
-		proc_idx_set = getSubprobIndices();#getProcIdxSet(nscen, dedicatedMaster);
+		proc_idx_set = getProcIdxSet(nscen, dedicatedMaster);
 	end
 	setProcIdxSet(proc_idx_set);
 	for s in 1:length(proc_idx_set)
