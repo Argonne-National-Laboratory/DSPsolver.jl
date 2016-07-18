@@ -149,6 +149,23 @@ function getSolution()
 	return getSolution(num)
 end
 
+
+function getSolution(m::JuMP.Model)
+        num = getNumCols()
+	sol = getSolution(num)
+	n_start = 1
+        n_end = m.numCols
+        m.colVal = copy(sol[n_start:n_end])
+        n_start += m.numCols
+        children = StructJuMP.getchildren(m)
+        for s in 1:StructJuMP.num_scenarios(m)
+             n_end += children[s].numCols
+             children[s].colVal = sol[n_start:n_end]
+             n_start += children[s].numCols
+        end
+
+end
+
 function getNumIterations()
 	return @dsp_ccall("getNumIterations", Cint, (Ptr{Void},), env.p)
 end
