@@ -21,16 +21,16 @@ MPI.Init();
 # random parameter
 xi = [[7,7] [11,11] [13,13]];
 
-# StochJuMP.jl model scripts
-m = StochasticModel(3);
-@defVar(m, 0 <= x[i=1:2] <= 5, Int);
-@setObjective(m, Min, -1.5*x[1]-4*x[2]);
-@second_stage m s begin
-	q = StochasticBlock(m, 1/3);
-	@defVal(q, y[j=1:4], Bin);
-	@setObjective(q, Min, -16*y[1]+19*y[2]+23*y[3]+28*y[4]);
-	@addConstraint(q, 2*y[1]+3*y[2]+4*y[3]+5*y[4]<=xi[1,s]-x[1]);
-	@addConstraint(q, 6*y[1]+1*y[2]+3*y[3]+2*y[4]<=xi[2,s]-x[2]);
+# StructJuMP.jl model scripts
+m = StructuredModel(num_scenarios=3);
+@variable(m, 0 <= x[i=1:2] <= 5, Int);
+@objective(m, Min, -1.5*x[1]-4*x[2]);
+for s = 1:3
+	q = StructuredModel(parent=m, prob=1/3);
+	@variable(q, y[j=1:4], Bin);
+	@objective(q, Min, -16*y[1]+19*y[2]+23*y[3]+28*y[4]);
+	@constraint(q, 2*y[1]+3*y[2]+4*y[3]+5*y[4]<=xi[1,s]-x[1]);
+	@constraint(q, 6*y[1]+1*y[2]+3*y[3]+2*y[4]<=xi[2,s]-x[2]);
 end
 
 DSPsolver.loadProblem(m);       # Load model m to DSP
