@@ -2,7 +2,7 @@ module DSPsolver
 
 # package code goes here
 import JuMP
-import StructJuMP
+import StochJuMP
 import MPI
 
 export DSP_SOLVER_DE, DSP_SOLVER_BD, DSP_SOLVER_BD_MPI, DSP_SOLVER_DD
