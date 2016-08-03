@@ -13,7 +13,7 @@ readSmps(filename) = readSmps(filename, false);
 
 function loadStochasticProblem(model::JuMP.Model, dedicatedMaster::Bool)
 	# get scenario problem
-	stoch = StochJuMP.getStructure(model)
+	stoch = StochJuMP.getStochastic(model)
 	
 	nscen  = convert(Cint, stoch.num_scen)
 	ncols1 = convert(Cint, model.numCols)
