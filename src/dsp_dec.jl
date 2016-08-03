@@ -25,7 +25,7 @@ function loadDecomposition(m::JuMP.Model)
  	startingCol[m] = 0;
  	ncols = m.numCols;
 	if haskey(m.ext, :Stochastic)
-		for sb in StructJuMP.getchildren(m)
+		for sb in StochJuMP.getchildren(m)
 			startingCol[sb] = ncols;
 			ncols += sb.numCols;
 		end
@@ -118,8 +118,8 @@ end
 function addCouplingConstraint(m::JuMP.Model, constr::JuMP.LinearConstraint)
 	mod = m;
 	# It does not matter whether m is the parent model or a stochastic block (child); all info is added to parent
-	while haskey(mod.ext, :Stochastic) && StructJuMP.getparent(mod) != nothing
-		mod = StructJuMP.getparent(mod);
+	while haskey(mod.ext, :Stochastic) && StochJuMP.getparent(mod) != nothing
+		mod = StochJuMP.getparent(mod);
 	end
 
 	initDecomposition(mod);
@@ -128,8 +128,8 @@ end
 
 function setVarSubproblem(m::JuMP.Model, var::JuMP.Variable, subproblem::Integer)
 	mod = m;
-	while haskey(mod.ext, :Stochastic) && StructJuMP.getparent(mod) != nothing
-		mod = StructJuMP.getparent(mod);
+	while haskey(mod.ext, :Stochastic) && StochJuMP.getparent(mod) != nothing
+		mod = StochJuMP.getparent(mod);
 	end
 
 	initDecomposition(mod);
