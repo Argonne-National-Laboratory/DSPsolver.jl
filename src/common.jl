@@ -28,7 +28,7 @@ function prepConstrMatrix(m::JuMP.Model)
         return JuMP.prepConstrMatrix(m)
     end
 
-    stoch = StructJuMP.getStructure(m)
+    stoch = StochJuMP.getStochastic(m)
     if stoch.parent == nothing
     	return JuMP.prepConstrMatrix(m)
     else
