@@ -157,8 +157,8 @@ function getSolution(m::JuMP.Model)
         n_end = m.numCols
         m.colVal = copy(sol[n_start:n_end])
         n_start += m.numCols
-        children = StructJuMP.getchildren(m)
-        for s in 1:StructJuMP.num_scenarios(m)
+        children = StochJuMP.getchildren(m)
+        for s in 1:StochJuMP.num_scenarios(m)
              n_end += children[s].numCols
              children[s].colVal = sol[n_start:n_end]
              n_start += children[s].numCols
