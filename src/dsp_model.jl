@@ -1,7 +1,7 @@
 function readSmps(filename)
 	# Check pointer to TssModel
 	check_problem()
-	@dsp_ccall("readSmps", Void, (Ptr{Void}, Ptr{Uint8}), env.p, convert(Vector{Uint8}, filename))
+	@dsp_ccall("readSmps", Void, (Ptr{Void}, Ptr{UInt8}), env.p, convert(Vector{UInt8}, filename))
 	nscen = getNumScenarios();
 	proc_idx_set = 1:nscen;
 	if isdefined(:MPI) == true
@@ -41,7 +41,7 @@ function loadProblem(model::JuMP.Model)
 	start, index, value, clbd, cubd, ctype, obj, rlbd, rubd = getDataFormat(model)
 	
 	@dsp_ccall("loadFirstStage", Void, 
-		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
+		(Ptr{Void}, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{UInt8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}),
 		env.p, start, index, value, clbd, cubd, ctype, obj, rlbd, rubd)
 	
 	for s in 1:length(proc_idx_set)
@@ -51,7 +51,7 @@ function loadProblem(model::JuMP.Model)
 		# get model data
 		start, index, value, clbd, cubd, ctype, obj, rlbd, rubd = getDataFormat(sb)
 		@dsp_ccall("loadSecondStage", Void, 
-			(Ptr{Void}, Cint, Cdouble, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
+			(Ptr{Void}, Cint, Cdouble, Ptr{Cint}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{UInt8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), 
 			env.p, proc_idx_set[s]-1, probability, start, index, value, clbd, cubd, ctype, obj, rlbd, rubd)
 	end
 	
