@@ -50,4 +50,7 @@ function prepConstrMatrix(m::JuMP.Model)
     return sparse(rind, cind, value, length(m.linconstr), stoch.parent.numCols + m.numCols)
 end
 
+function writeMps(filename::AbstractString)
+	@dsp_ccall("writeMps", Void, (Ptr{Void}, Ptr{UInt8}), env.p, filename)
+end
 
