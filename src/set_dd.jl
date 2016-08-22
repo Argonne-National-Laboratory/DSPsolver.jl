@@ -32,6 +32,10 @@ function setDdMasterNumCutsPerIter(num::Integer)
 	@dsp_ccall("setDdMasterNumCutsPerIter", Void, (Ptr{Void}, Cint), env.p, convert(Cint, num))
 end
 
+function setDdMaxPrimsolEval(num::Integer)
+	@dsp_ccall("setDdMaxPrimsolEval", Void, (Ptr{Void}, Cint), env.p, convert(Cint, num))
+end
+
 function setDdStoppingTolerance(tol::Number)
         @dsp_ccall("setDdStoppingTolerance", Void, (Ptr{Void}, Cdouble), env.p, convert(Cdouble, tol))
 end
