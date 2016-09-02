@@ -17,7 +17,7 @@ end
 solveBd() = solveBd(1);
 
 function solveDd(comm)
-	@dsp_ccall("solveDd", Void, (Ptr{Void}, Cint), env.p, convert(Cint, comm.val))
+	@dsp_ccall("solveDd", Void, (Ptr{Void}, MPI.CComm), env.p, convert(MPI.CComm, comm))
 end
 
 if isdefined(:MPI)
